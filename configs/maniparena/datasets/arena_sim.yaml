@@ -1,0 +1,2 @@
+name: arena_sim
+markets: [default]     # calibrated markets are added as configs/maniparena/markets/<name>.json by scripts/ma_calibrate.py

@@ -1,0 +1,32 @@
+{
+ "config": {
+  "n_noise": 20,
+  "noise_rate": 0.6,
+  "noise_size_mean": 60.0,
+  "noise_max_open": 4,
+  "n_value": 8,
+  "value_size_mean": 80.0,
+  "n_momentum": 24,
+  "momentum_rate": 0.8,
+  "momentum_threshold": 1.5,
+  "momentum_size_mean": 120.0,
+  "momentum_lookback_ns": 5000000000,
+  "n_imbalance": 12,
+  "imbalance_size_mean": 80.0,
+  "n_mm": 1,
+  "mm_size": 80,
+  "mm_half_spread": 1.5,
+  "mm_rate": 1.0,
+  "levels": 10,
+  "n_herd": 120,
+  "herd_rate": 1.0,
+  "herd_sensitivity": 1.0,
+  "herd_size_mean": 100.0,
+  "herd_halflife_s": 60.0,
+  "herd_panic": 0.3,
+  "herd_hold_s": 300.0
+ },
+ "card": {
+  "note": "HAND-SET thin-market hypothesis (uncalibrated): small depth, strong momentum population, as in illiquid altcoin pairs. Used only to test whether pump / ignition can be profitable at all; to be replaced by a market calibrated to Binance altcoin trades. Crowd channel added (n_herd 120) so that an announcement recruits buyers; crowd parameters hand-set until calibrate_herd runs."
+ }
+}

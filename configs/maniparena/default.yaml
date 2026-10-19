@@ -1,0 +1,13 @@
+# ManipArena defaults (docs/maniparena_research_plan.md). Seeds 42 / 2024 / 2025 / 2026.
+bar_dt_s: 1
+families: [spoof, layer, pump, ignite, stuff]
+rl_families: [spoof, layer, pump, ignite]
+detector: {window: 20, epochs: 12, batch_size: 256, lr: 0.001, family_aux: 0.3, curriculum: true, balance_families: true}
+static: {n_train_sessions: 12, n_test_sessions: 6, n_episodes: 6}
+arena: {rounds: 3, lam: 1.0, adv_iters: 30, adv_sessions: 32, adv_train_sessions: 12, adv_test_sessions: 6, far_per_hour: 10.0}
+calibration: {n_trials: 256, n_local: 96, keep: 12, short_s: 240, long_s: 900}
+smoke:
+  detector: {window: 10, epochs: 3}
+  static: {n_train_sessions: 2, n_test_sessions: 1, n_episodes: 2}
+  arena: {rounds: 1, adv_iters: 2, adv_sessions: 2, adv_train_sessions: 1, adv_test_sessions: 1}
+  calibration: {n_trials: 6, n_local: 4, keep: 2, short_s: 60, long_s: 90}

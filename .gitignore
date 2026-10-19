@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+data_raw/
+results/
+runs/
+logs/
+*.npz
+*.zip
+*.gz
+.DS_Store
