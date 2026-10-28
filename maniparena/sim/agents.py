@@ -211,34 +211,56 @@ class MarketMaker(BaseAgentClass):
 class HerdAgent(BaseAgentClass):
     """Announcement-driven crowd (the victims of a Telegram pump). Dormant while the public hype level is zero. When a
     manipulator announces, ctx.hype jumps and decays with half-life herd_halflife_s; each wake-up a herd agent buys with
-    probability min(1, herd_sensitivity * hype) (market orders, so the demand is real), and an agent holding inventory
-    sells with a hazard that rises once the price stops rising (panic) or after herd_hold_s. This is the demand channel
-    that makes pump-and-dump profitable; its strength is calibrated to real post-announcement trade windows."""
+    probability min(1, herd_sensitivity * hype). It buys with a MARKETABLE LIMIT order priced herd_aggress_bps above the
+    best ask (FOMO chasing): the part that fills is real demand, the rest rests above the old touch and lifts the price,
+    which is what lets volume and price keep rising once the thin book's asks are gone (plain market orders silently fill
+    nothing on an empty ask side, which capped the first crowd model at ~30x normal volume). Unfilled bids are cancelled
+    after herd_patience_s. An agent holding inventory sells with a hazard that rises once the price stops rising (panic) or
+    after herd_hold_s. The crowd's strength is calibrated to real post-announcement trade windows (calib.calibrate_herd)."""
     name = "herd"
 
     def __init__(self, cfg, n, rate, rng, id_offset):
         super().__init__(cfg, n, rate, rng, id_offset)
         self.entry: Dict[int, tuple] = {}
+        self.bid: Dict[int, tuple] = {}            # aid -> (order id, time placed)
 
     def wake(self, aid: int, ctx) -> None:
         c = self.cfg
         h = ctx.hype_level()
+        # cancel a stale resting bid
+        ob = self.bid.get(aid)
+        if ob is not None:
+            oid, t0 = ob
+            if oid not in ctx.book.orders:
+                self.bid.pop(aid, None)
+            elif (ctx.t - t0) / 1e9 > c.herd_patience_s:
+                ctx.cancel(aid, oid); self.bid.pop(aid, None)
         inv = ctx.inv.get(aid, 0)
         if inv > 0:
-            t_in, px_in = self.entry.get(aid, (ctx.t, ctx.book.mid() or 0.0))
-            mid = ctx.book.mid() or px_in
+            if aid not in self.entry:
+                self.entry[aid] = (ctx.t, ctx.book.mid() or 0.0)
+            t_in, px_in = self.entry[aid]
             r = ctx.mid_return(int(3e9)) or 0.0
             hazard = c.herd_panic * (1.0 if r < 0 else 0.15) + (1.0 if (ctx.t - t_in) / 1e9 > c.herd_hold_s else 0.0)
             if self.rng.random() < min(1.0, hazard):
+                ob = self.bid.pop(aid, None)
+                if ob is not None:
+                    ctx.cancel(aid, ob[0])
                 ctx.market(aid, ASK, inv); self.entry.pop(aid, None)
             return
-        if h <= 1e-6:
+        if h <= 1e-6 or aid in self.bid:
             return
         if self.rng.random() < min(1.0, c.herd_sensitivity * h):
             q = self._size(c.herd_size_mean, c.herd_size_sigma, c.lot)
-            got = ctx.market(aid, BID, q)
-            if got > 0:
-                self.entry[aid] = (ctx.t, ctx.book.mid() or 0.0)
+            ba = ctx.book.best_ask()
+            mid = ctx.book.mid()
+            ref = ba if ba is not None else (int(np.ceil(mid)) + 1 if mid is not None else None)
+            if ref is None:
+                return
+            px = int(ref + max(0, round(ref * c.herd_aggress_bps * 1e-4)))
+            oid = ctx.limit(aid, BID, px, q)
+            if oid is not None:
+                self.bid[aid] = (oid, ctx.t)
 
 
 AGENT_CLASSES = {"noise": NoiseAgent, "value": ValueAgent, "momentum": MomentumAgent, "imbalance": ImbalanceAgent, "mm": MarketMaker, "herd": HerdAgent}

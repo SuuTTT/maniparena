@@ -286,7 +286,8 @@ PUMP_FACT_SPEC: Dict[str, Tuple[str, float]] = {"pf_peak_ret": ("log", 1.0), "pf
 # could not get past +1.5 %)
 HERD_SPACE: Dict[str, Tuple[float, float, bool]] = {"n_herd": (20, 3000, True), "herd_sensitivity": (0.05, 30.0, True), "herd_size_mean": (20.0, 20000.0, True),
                                                     "herd_halflife_s": (5.0, 600.0, True), "herd_panic": (0.005, 1.0, True), "herd_hold_s": (20.0, 1800.0, True),
-                                                    "herd_rate": (0.2, 5.0, True)}
+                                                    "herd_rate": (0.2, 5.0, True), "herd_aggress_bps": (0.0, 500.0, False),
+                                                    "herd_patience_s": (2.0, 120.0, True)}
 
 
 def pump_facts(t_ns: np.ndarray, px: np.ndarray, qty: np.ndarray, t_ann: int, post_s: float = 1800.0, pre_s: float = 6 * 3600.0) -> Dict[str, float]:

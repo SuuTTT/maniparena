@@ -87,6 +87,8 @@ class SimConfig:
     herd_halflife_s: float = 60.0
     herd_panic: float = 0.3
     herd_hold_s: float = 300.0
+    herd_aggress_bps: float = 50.0       # FOMO: limit price above the best ask, in bps of price
+    herd_patience_s: float = 20.0       # cancel an unfilled crowd bid after this long
     # activity clustering: all background rates are multiplied by exp(x_t) * (1 + e_t) where x_t is a log-AR(1) process
     # updated every act_dt_ns and e_t decays at hawkes_decay (per second) and jumps by hawkes_alpha after every execution
     act_sigma: float = 0.3
