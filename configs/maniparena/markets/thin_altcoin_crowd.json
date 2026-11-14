@@ -48,14 +48,16 @@
     "mm_size": 151,
     "mm_inv_skew": 0.3,
     "mm_inv_limit": 3000,
-    "n_herd": 2662,
-    "herd_rate": 0.9677761619848844,
-    "herd_sensitivity": 4.01043871226602,
-    "herd_size_mean": 317.11321017417714,
+    "n_herd": 1101,
+    "herd_rate": 2.1840855664804204,
+    "herd_sensitivity": 10.600951835474818,
+    "herd_size_mean": 44.52461457148633,
     "herd_size_sigma": 0.8,
-    "herd_halflife_s": 92.84178091769044,
-    "herd_panic": 0.7121808056526692,
-    "herd_hold_s": 85.25454926519485,
+    "herd_halflife_s": 281.5960107362766,
+    "herd_panic": 0.02211389972723163,
+    "herd_hold_s": 43.56152693003064,
+    "herd_aggress_bps": 413.58671226034323,
+    "herd_patience_s": 9.1826361753665,
     "act_sigma": 0.8476418836807574,
     "act_rho": 0.6773612701297032,
     "act_dt_ns": 1000000000,
@@ -68,12 +70,12 @@
   },
   "card": {
     "mode": "pump_herd",
-    "distance": 1.1111189629242544,
+    "distance": 0.7422541564521182,
     "sim_pump": {
-      "pf_peak_ret": 0.027954256670902122,
-      "pf_t_peak_s": 37.70618514,
-      "pf_vol_ratio": 31.325966850828728,
-      "pf_end_ret": 0.0
+      "pf_peak_ret": 0.04955900881982367,
+      "pf_t_peak_s": 103.47053543,
+      "pf_vol_ratio": 81.02363896848138,
+      "pf_end_ret": -0.004199916001680015
     },
     "real_pump": {
       "pf_peak_ret": 0.1298369771453538,
@@ -82,10 +84,10 @@
       "pf_end_ret": 0.008423552025327075
     },
     "per_stat": {
-      "pf_peak_ret": 1.5357101576302155,
-      "pf_t_peak_s": 0.22139734990126225,
-      "pf_vol_ratio": 1.881977982571445,
-      "pf_end_ret": 0.008423552025327075
+      "pf_peak_ret": 0.9631155845923232,
+      "pf_t_peak_s": 0.788065397372625,
+      "pf_vol_ratio": 0.931684396814676,
+      "pf_end_ret": 0.01262346802700709
     },
     "n_trials": 96,
     "n_local": 48,
@@ -96,7 +98,7 @@
     ],
     "n_real_pumps": 150
   },
-  "seconds": 2254.4443073272705,
+  "seconds": 4175.116521596909,
   "host": "thin_altcoin + La Morgia pump windows",
   "mode": "pump_herd"
 }
