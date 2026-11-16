@@ -6,13 +6,14 @@ import argparse, os, subprocess, sys
 ap = argparse.ArgumentParser()
 ap.add_argument("--bank", required=True); ap.add_argument("--detector", required=True); ap.add_argument("--seed", type=int, required=True)
 ap.add_argument("--protocols", nargs="+", required=True); ap.add_argument("--device", default="cpu")
+ap.add_argument("--override", nargs="*", default=[], help="passed to ma_run.py, e.g. detector.epochs=30")
 a = ap.parse_args()
 out = os.environ.get("CQ_OUTPUT_DIR", "results/maniparena")
 here = os.path.dirname(os.path.abspath(__file__))
 fails = 0
 for i, p in enumerate(a.protocols):
     r = subprocess.run([sys.executable, os.path.join(here, "ma_run.py"), "--bank", a.bank, "--detector", a.detector, "--protocol", p, "--seed", str(a.seed),
-                        "--device", a.device, "--out", out])
+                        "--device", a.device, "--out", out] + (["--override"] + a.override if a.override else []))
     fails += r.returncode != 0
     with open(os.path.join(out, "progress.txt"), "a") as f:
         f.write(f"{i + 1}/{len(a.protocols)} {p} rc={r.returncode}\n")
